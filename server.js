@@ -7,6 +7,7 @@ const tracer = api.trace.getTracer('simple-express-mongo-app');
 const express = require('express');
 const cors = require('cors');
 const profileRoutes = require('./routes/profileRoutes');
+const { getInstanceId } = require('./lib/opentelemetry');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.use(async (req, res, next) => {
 		url: req.url,
 		signal: 'trace',
 		initTime: Date.now(),
+		instanceId: getInstanceId(),
 	};
 
 	const span = tracer.startSpan(spanName, {
@@ -33,7 +35,6 @@ app.use(async (req, res, next) => {
 
 	// Set the created span as the active span in the context
 	const ctx = api.trace.setSpan(api.context.active(), span);
-	console.log(`Responding to ${spanName}`);
 
 	res.on('finish', () => {
 		span.setAttribute('finishTime', Date.now());
