@@ -48,7 +48,7 @@ const updateProfile = async (req, res) => {
 		}
 		profile.name = name;
 		await profile.save();
-		const { __v, createdAt, updatedAt, ...rest } = newProfile.toObject();
+		const { __v, createdAt, updatedAt, ...rest } = profile.toObject();
 		res.status(201).json({ message: 'Profile creation successful', profile: rest });
 	} catch (error) {
 		if (error.name === 'ValidationError') {
