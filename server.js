@@ -49,6 +49,35 @@ app.use(async (req, res, next) => {
 // Routes
 app.use('/profile', profileRoutes());
 
+// Utility function to block the event loop
+const blockEventLoop = (duration) => {
+	const start = Date.now();
+	while (Date.now() - start < duration) {
+		// This loop blocks the event loop
+	}
+};
+
+// Route that blocks the event loop for 3 seconds
+app.get('/block-3-seconds', (req, res) => {
+	console.log('Blocking event loop for 3 seconds...');
+	blockEventLoop(3000);
+	res.send('Blocked event loop for 3 seconds');
+});
+
+// Route that blocks the event loop for 5 seconds
+app.get('/block-5-seconds', (req, res) => {
+	console.log('Blocking event loop for 5 seconds...');
+	blockEventLoop(5000);
+	res.send('Blocked event loop for 5 seconds');
+});
+
+// Route that blocks the event loop for 10 seconds
+app.get('/block-10-seconds', (req, res) => {
+	console.log('Blocking event loop for 10 seconds...');
+	blockEventLoop(10000);
+	res.send('Blocked event loop for 10 seconds');
+});
+
 // Middleware to handle requests for routes that are not available
 app.use((req, res, next) => {
 	res.status(404).json({ errors: ['Invalid route'] });
