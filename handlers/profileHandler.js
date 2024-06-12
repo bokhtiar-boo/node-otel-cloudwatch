@@ -42,7 +42,7 @@ const updateProfile = async (req, res) => {
 			return res.status(400).json({ errors: ['Profile ID/Name is required'] });
 		}
 
-		const profile = new ProfileModel.findById(_id);
+		const profile = await ProfileModel.findById(_id);
 		if (!profile) {
 			return res.status(404).json({ errors: ['Profile not found'] });
 		}
